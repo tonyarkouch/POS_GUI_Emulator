@@ -8,16 +8,16 @@ package com.mycompany.finalproject;
  *
  * @author tonya
  * */
-import java.util.ArrayList; // Import the ArrayList class from the java.util package
-import java.util.List; // Import the List interface from the java.util package
+import java.util.ArrayList; 
+
 
 public class Order {
-    // Declare a private List to store MenuItems objects
-    private List<MenuItems> items;
+    // Declare a private ArrrayList to store MenuItems objects
+    private ArrayList<MenuItems> items;
 
-    // Constructor for Order class that initializes the items list
+   
     public Order() {
-        this.items = new ArrayList<>(); // Initialize items as a new instance of ArrayList
+        this.items = new ArrayList<>();
     }
 
     // Method to add a MenuItem object to the items list
@@ -26,7 +26,7 @@ public class Order {
     }
 
     // Method to get the list of MenuItem objects
-    public List<MenuItems> getItems() {
+    public ArrayList<MenuItems> getItems() {
         return items; // Return the items list
     }
 

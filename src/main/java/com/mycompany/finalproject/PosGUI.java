@@ -12,7 +12,8 @@ import javax.swing.*; // Import Swing components for the GUI
 import java.awt.*; // Import AWT container and component classes
 import java.awt.event.ActionEvent; // Import AWT event classes for handling user actions
 import java.util.ArrayList; // Import the ArrayList class for dynamic arrays
-import java.util.List; // Import the List interface for typed lists
+import java.util.Arrays;
+
 
 public class PosGUI {
     private JFrame frame; // Main window frame
@@ -20,15 +21,15 @@ public class PosGUI {
     private JPanel controlPanel; // Panel for displaying control buttons like start, complete order etc.
     private JTextArea orderTextArea; // Text area to display the order details
     private JButton startOrderButton, completeOrderButton, addMenuItemButton, closeOutDayButton; // Buttons for user interaction
-    private List<MenuItems> menuItemsList; // List to hold menu items
-    private List<Order> completedOrders; // List to track completed orders
+    private ArrayList<MenuItems> menuItemsList; // List to hold menu items
+    private ArrayList<Order> completedOrders; // List to track completed orders
     private Order currentOrder; // Current order being processed
     private int orderCounter = 0; // Counter for orders processed
 
     // Assume MenuItems and Order classes exist and operate as intended
 
     public PosGUI(MenuItems[] menuItems) { // Constructor with initial menu items
-        this.menuItemsList = new ArrayList<>(List.of(menuItems)); // Initialize menu items list
+        this.menuItemsList = new ArrayList<>(Arrays.asList(menuItems)); // Initialize menu items list
         this.completedOrders = new ArrayList<>(); // Initialize completed orders list
         this.currentOrder = new Order(); // Create a new order instance
         initializeUI(); // Initialize the user interface

@@ -9,16 +9,12 @@ package com.mycompany.finalproject;
  * @author tonya
  */
 public class MenuItems {
-    // Declare a private String variable to store the name of the menu item
-    private String name;
-    // Declare a private double variable to store the price of the menu item
+    private String name;  
     private double price;
 
     // Constructor for MenuItems class that initializes name and price
     public MenuItems(String name, double price) {
-        // Assign the value of the parameter name to the instance variable name
         this.name = name;
-        // Assign the value of the parameter price to the instance variable price
         this.price = price;
     }
 
@@ -33,7 +29,7 @@ public class MenuItems {
         // Return the value of the instance variable price
         return price;
     }
-    // End of MenuItems class
+   
 }
 
 
