@@ -116,19 +116,41 @@ public class PosGUI {
     }
 
     private void addMenuItem() { // Method to add a new menu item
+    boolean itemAdded = false; // Flag to check if item has been added successfully
+    while (!itemAdded) {
         // Prompt user for menu item name
         String name = JOptionPane.showInputDialog(frame, "Enter menu item name:");
+        if (name == null || name.isEmpty()) { // Check if the user cancelled the input or entered an empty string
+            return; // Exit if no name is provided
+        }
+
+        // Convert input name to lowercase and check for existing item with the same name (also in lowercase)
+        boolean nameExists = menuItemsList.stream()
+                          .anyMatch(item -> item.getName().toLowerCase().equals(name.toLowerCase()));
+        if (nameExists) {
+            JOptionPane.showMessageDialog(frame, "Item with this name already exists. Please enter a different name.", "Error", JOptionPane.ERROR_MESSAGE);
+            continue; // Continue looping if name exists
+        }
+
         // Prompt user for menu item price
         String priceString = JOptionPane.showInputDialog(frame, "Enter price:");
+        if (priceString == null || priceString.isEmpty()) { // Check if the user cancelled the input or entered an empty string
+            return; // Exit if no price is provided
+        }
+
         try {
             double price = Double.parseDouble(priceString); // Parse price input as double
             MenuItems newItem = new MenuItems(name, price); // Create new MenuItems instance
             menuItemsList.add(newItem); // Add new item to menu items list
             JOptionPane.showMessageDialog(frame, "Menu item added successfully."); // Show success message
+            itemAdded = true; // Set flag to true to exit loop
         } catch (NumberFormatException ex) { // Handle invalid price input
-            JOptionPane.showMessageDialog(frame, "Invalid price entered.", "Error", JOptionPane.ERROR_MESSAGE); // Show error message
+            JOptionPane.showMessageDialog(frame, "Invalid price entered. Please enter a valid number.", "Error", JOptionPane.ERROR_MESSAGE); // Show error message
         }
     }
+}
+
+
 
     private void completeOrder() { // Method to complete an order
         // Format total price to 2 decimal places
