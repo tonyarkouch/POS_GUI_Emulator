@@ -10,72 +10,85 @@ package com.mycompany.finalproject;
 
 import javax.swing.*; // Import Swing components for the GUI
 import java.awt.*; // Import AWT container and component classes
-import java.awt.event.ActionEvent; // Import AWT event classes for handling user actions
 import java.util.ArrayList; // Import the ArrayList class for dynamic arrays
 import java.util.Arrays;
 
 
 public class PosGUI {
-    private JFrame frame; // Main window frame
-    private JPanel menuPanel; // Panel for displaying menu item buttons
-    private JPanel controlPanel; // Panel for displaying control buttons like start, complete order etc.
-    private JTextArea orderTextArea; // Text area to display the order details
-    private JButton startOrderButton, completeOrderButton, addMenuItemButton, closeOutDayButton; // Buttons for user interaction
-    private ArrayList<MenuItems> menuItemsList; // List to hold menu items
-    private ArrayList<Order> completedOrders; // List to track completed orders
-    private Order currentOrder; // Current order being processed
-    private int orderCounter = 0; // Counter for orders processed
+    private JFrame frame;
+    private JPanel menuPanel, controlPanel;
+    private JTextArea orderTextArea;
+    private JButton startDayButton, startOrderButton, completeOrderButton, addMenuItemButton, closeOutDayButton;
+    private ArrayList<MenuItems> menuItemsList;
+    private ArrayList<Order> completedOrders;
+    private Order currentOrder;
+    private int orderCounter = 0;
+    int day = 1;
 
-    // Assume MenuItems and Order classes exist and operate as intended
-
-    public PosGUI(MenuItems[] menuItems) { // Constructor with initial menu items
-        this.menuItemsList = new ArrayList<>(Arrays.asList(menuItems)); // Initialize menu items list
-        this.completedOrders = new ArrayList<>(); // Initialize completed orders list
-        this.currentOrder = new Order(); // Create a new order instance
-        initializeUI(); // Initialize the user interface
+    public PosGUI(MenuItems[] menuItems) {
+        this.menuItemsList = new ArrayList<>(Arrays.asList(menuItems));
+        this.completedOrders = new ArrayList<>();
+        this.currentOrder = new Order();
+        initializeUI();
     }
 
-    private void initializeUI() { // Method to set up user interface
-        frame = new JFrame("POS System"); // Main frame with title
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Close operation
-        frame.setLayout(new BorderLayout()); // Layout manager for frame
+    private void initializeUI() {
+        frame = new JFrame("POS System");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLayout(new BorderLayout());
 
-        controlPanel = new JPanel(new FlowLayout()); // Control panel with flow layout
-        menuPanel = new JPanel(new GridLayout(0, 1, 5, 5)); // Menu panel with grid layout
+        controlPanel = new JPanel(new FlowLayout());
+        menuPanel = new JPanel(new GridLayout(0, 1, 5, 5));
 
-        startOrderButton = new JButton("Start Order"); // Button to start a new order
-        startOrderButton.addActionListener(e -> startNewOrder()); // Action listener for button
+        startDayButton = new JButton("Start Day");
+        startDayButton.addActionListener(e -> startDay());
 
-        completeOrderButton = new JButton("Complete Order"); // Button to complete an order
-        completeOrderButton.addActionListener(e -> completeOrder()); // Action listener for button
-        completeOrderButton.setVisible(false); // Initially invisible
+        startOrderButton = new JButton("Start Order");
+        startOrderButton.addActionListener(e -> startNewOrder());
+        startOrderButton.setVisible(false); // Initially hide Start Order button
 
-        addMenuItemButton = new JButton("Add Menu Item"); // Button to add a new menu item
-        addMenuItemButton.addActionListener(e -> addMenuItem()); // Action listener for button
+        completeOrderButton = new JButton("Complete Order");
+        completeOrderButton.addActionListener(e -> completeOrder());
+        completeOrderButton.setVisible(false);
 
-        closeOutDayButton = new JButton("Close Out Day"); // Button to close out the day
-        closeOutDayButton.addActionListener(e -> closeOutDay()); // Action listener for button
-        closeOutDayButton.setVisible(false); // Initially invisible until an order is completed
+        addMenuItemButton = new JButton("Add Menu Item");
+        addMenuItemButton.addActionListener(e -> addMenuItem());
 
-        controlPanel.add(startOrderButton); // Add start order button to control panel
-        controlPanel.add(addMenuItemButton); // Add add menu item button to control panel
+        closeOutDayButton = new JButton("Close Out Day");
+        closeOutDayButton.addActionListener(e -> closeOutDay());
+        closeOutDayButton.setVisible(false);
 
-        orderTextArea = new JTextArea(10, 30); // Text area for order details
-        orderTextArea.setEditable(false); // Make text area non-editable
+        controlPanel.add(startDayButton);
+        controlPanel.add(addMenuItemButton);
 
-        frame.add(controlPanel, BorderLayout.NORTH); // Add control panel to frame
-        frame.add(new JScrollPane(orderTextArea), BorderLayout.CENTER); // Add scrollable order text area to frame
-        frame.add(menuPanel, BorderLayout.SOUTH); // Add menu panel to frame
+        orderTextArea = new JTextArea(10, 30);
+        orderTextArea.setEditable(false);
+        orderTextArea.setText("Day: " + Integer.toString(day));
 
-        menuPanel.setVisible(false); // Initially hide menu panel
+        frame.add(controlPanel, BorderLayout.NORTH);
+        frame.add(new JScrollPane(orderTextArea), BorderLayout.CENTER);
+        frame.add(menuPanel, BorderLayout.SOUTH);
 
-        frame.pack(); // Pack the components within the frame
-        frame.setLocationRelativeTo(null); // Center the frame
-        frame.setVisible(true); // Make frame visible
+        menuPanel.setVisible(false);
+
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+    }
+
+    private void startDay() {
+        
+        startDayButton.setVisible(false);// Hide Start Day button
+        addMenuItemButton.setVisible(false);// Hide Add Menu Button 
+        controlPanel.add(startOrderButton); // Add Start Order button
+        startOrderButton.setVisible(true); // Show Start Order button
+        orderTextArea.setText("Day: " + Integer.toString(day));
+        frame.pack();
     }
 
     private void startNewOrder() { // Method to start a new order
         this.currentOrder = new Order(); // Reset/Create a new Order instance
+        orderTextArea.setText("");
         if (!menuPanel.isVisible()) { // Check if menu panel is not visible
             buildMenuItems(); // Call to populate menu panel with menu items
             menuPanel.setVisible(true); // Make menu panel visible
@@ -140,7 +153,7 @@ public class PosGUI {
             startOrderButton.setVisible(true); // Make start order button visible
             controlPanel.add(closeOutDayButton); // Add close out day button to control panel
             closeOutDayButton.setVisible(true); // Make close out day button visible
-            orderTextArea.setText(""); // Clear order text area
+            orderTextArea.setText("Day: " + Integer.toString(day));
             currentOrder = new Order(); // Reset current order
             frame.pack(); // Repack frame components
         }
@@ -163,9 +176,15 @@ public class PosGUI {
         // Show total sales message
         JOptionPane.showMessageDialog(frame, "Total sales for the day: $" + String.format("%.2f", totalSales),
                 "Day Closed", JOptionPane.INFORMATION_MESSAGE);
+        day++;
         completedOrders.clear(); // Clear completed orders list
         orderCounter = 0; // Reset order counter
         closeOutDayButton.setVisible(false); // Hide close out day button
+        startOrderButton.setVisible(false);
+        startDayButton.setVisible(true);
+        controlPanel.add(addMenuItemButton);
+        addMenuItemButton.setVisible(true);
+        orderTextArea.setText("Day: " + Integer.toString(day));
         frame.pack(); // Repack frame components
     }
 
